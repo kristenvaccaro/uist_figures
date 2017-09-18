@@ -1,0 +1,109 @@
+fig = plt.figure()
+ax = fig.add_subplot(111)
+bp = ax.boxplot(data)
+params = {
+    'axes.labelsize': 8,
+    'text.fontsize': 8,
+    'legend.fontsize': 10,
+    'xtick.labelsize': 10,
+    'ytick.labelsize': 10,
+    'text.usetex': False,
+    'figure.figsize': [2.5, 4.5]
+}
+matplotlib.rcParams.update(params)
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+ax.get_xaxis().tick_bottom()
+ax.get_yaxis().tick_left()
+ax.tick_params(axis='x', direction='out')
+ax.tick_params(axis='y', length=0)
+# GRID LINES IN BACKGROUND:
+#ax.grid(axis='y', color="0.9", linestyle='-', linewidth=.2)
+#ax.set_axisbelow(True)
+
+test = [i/float(10) for i in range(8,10*len(labels)+3,1)]
+y = [.1666]*len(test)
+plt.plot(test,y,'--',color='#0033cc')
+#plt.plot(test,y,'--',color='coral')
+
+
+colors = ['lightgrey']*len(data)
+colors2 = ['darkgrey']*len(data)
+
+for i in range(0, len(bp['boxes'])):
+    bp['boxes'][i].set_color(colors2[i])
+        # we have two whiskers!
+    bp['whiskers'][i*2].set_color(colors[i])
+    bp['whiskers'][i*2 + 1].set_color(colors[i])
+    bp['whiskers'][i*2].set_linewidth(2)
+    bp['whiskers'][i*2 + 1].set_linewidth(2)
+    # top and bottom fliers
+    # (set allows us to set many parameters at once)
+#    bp['fliers'][i * 2].set(markerfacecolor=colors[i],marker='o', alpha=0.75, markersize=6,markeredgecolor='none')
+#    bp['fliers'][i * 2 + 1].set(markerfacecolor=colors[i],marker='o', alpha=0.75, markersize=6,markeredgecolor='none')
+    bp['fliers'][i].set(markerfacecolor=colors[i],marker='o', alpha=0.75, markersize=6,markeredgecolor='none')
+    bp['fliers'][i].set(markerfacecolor=colors[i],marker='o', alpha=0.75, markersize=6,markeredgecolor='none')
+    bp['medians'][i].set_color('black')
+    bp['medians'][i].set_linewidth(3)
+    # and 4 caps to remove
+    for c in bp['caps']:
+        c.set_linewidth(0)
+
+#bp = plt.boxplot(data)
+plt.suptitle("Word Intrusion: Element Language")
+axes = plt.gca()
+axes.set_ylim([-.1,1.1])
+plt.xticks([i+1 for i in range(len(labels))], labels)
+plt.xlabel('Number of Topics')
+plt.ylabel('Agreement with Model')
+for i in range(len(data)):
+    y = data[i]
+    # Add some random "jitter" to the x-axis
+    x = np.random.normal(1+i, 0.03, size=len(y))
+#    plt.plot(x, y, '.', alpha=0.1,markersize=12,color='coral')
+    plt.plot(x, y, '.', alpha=0.1,markersize=12,color='#00cc99')
+
+plt.show()
+
+
+data = []
+labels = []
+for l in ['"concrete"']:
+    for k in ['"25"','"50"','"100"','"200"','"400"','"800"']:
+        tmpdata = []
+        for j in results[l][k]:
+            tmpdata.append(float(results[l][k][j]["correct"])/results[l][k][j]["total"])
+        data.append(tmpdata)
+        labels.append(k[1:-1])
+
+
+data = []
+labels = []
+for l in ['"concrete"']:
+    for k in ['"5"','"15"','"25"','"35"','"45"','"50"']:
+        tmpdata = []
+        for j in results[l][k]:
+            tmpdata.append(float(results[l][k][j]["correct"])/results[l][k][j]["total"])
+        data.append(tmpdata)
+        labels.append(k[1:-1])
+
+
+plt.figure()
+plt.boxplot(data)
+plt.suptitle("Word Intrusion: Element Language")
+axes = plt.gca()
+axes.set_ylim([-.1,1.1])
+plt.xticks([1, 2, 3,4,5,6], labels)
+plt.xlabel('Number of Topics')
+plt.ylabel('Agreement with Model')
+test = [i/float(10) for i in range(8,63,1)]
+y = [.1666]*len(test)
+plt.plot(test,y,'.',color='coral')
+for i in range(len(data)):
+    y = data[i]
+    # Add some random "jitter" to the x-axis
+    x = np.random.normal(1+i, 0.03, size=len(y))
+    plt.plot(x, y, '.', alpha=0.3,color='coral')
+
+plt.show()
